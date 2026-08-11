@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Events - AlumniConnect</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/pages.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Background Decoration Blobs -->
+    <div class="bg-blob" id="blob-1"></div>
+    <div class="bg-blob" id="blob-2"></div>
+    <div class="bg-blob" id="blob-3"></div>
+
+    <div class="app-container">
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-custom">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="index.html"><i class="bi bi-mortarboard-fill"></i> AlumniConnect</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                        <li class="nav-item"><a class="nav-link" href="alumni-directory.html">Directory</a></li>
+                        <li class="nav-item"><a class="nav-link" href="jobs.html">Jobs</a></li>
+                        <li class="nav-item"><a class="nav-link active" href="events.html">Events</a></li>
+                        <li class="nav-item"><a class="nav-link" href="community.html">Community</a></li>
+                    </ul>
+                    <div id="navAuthSpans">
+                        <a href="login.html" class="btn btn-outline-primary">Log In</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <div class="page-header">
+            <h1 class="display-3">Events & Webinars</h1>
+            <p class="lead">Join workshops, seminars, and reconnect with your batchmates.</p>
+            <div class="mt-4" id="createEventBtnContainer" style="display: none;">
+                <a href="create-event.html" class="btn btn-primary"><i class="bi bi-calendar-plus me-2"></i>Create Event</a>
+            </div>
+        </div>
+
+        <div class="container mb-5">
+            <div class="row g-4" id="eventsContainer">
+                <div class="text-center py-5 w-100"><div class="spinner-border text-primary"></div></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="http://localhost:5000/socket.io/socket.io.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const userStr = localStorage.getItem('user');
+            if(userStr) {
+                const user = JSON.parse(userStr);
+                if(user.role === 'admin') {
+                    document.getElementById('createEventBtnContainer').style.display = 'block';
+                }
+            }
+            
+            if (window.socket) {
+                window.socket.on('event_created', () => fetchEvents());
+                window.socket.on('event_updated', () => fetchEvents());
+            }
+
+            fetchEvents();
+        });
+
+        async function fetchEvents() {
+            const container = document.getElementById('eventsContainer');
+            try {
+                const events = await api.events.getAll();
+                if (events.length === 0) {
+                    container.innerHTML = `<div class="card p-5 text-center w-100"><i class="bi bi-info-circle fs-1 mb-3 text-primary"></i> <p>No upcoming events found.</p></div>`;
+                    return;
+                }
+
+                let html = '';
+                events.forEach(ev => {
+                    const imgUrl = ev.bannerImage ? `http://localhost:5000${ev.bannerImage}` : `https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80`;
+                    const isOnline = ev.venue.toLowerCase().includes('online') || ev.meetingLink;
+                    const user = JSON.parse(localStorage.getItem('user'));
+                    const isRegistered = user && ev.registeredUsers.includes(user.id || user._id);
+                    
+                    let linkedJobHtml = '';
+                    if (ev.linkedJob) {
+                        linkedJobHtml = `<div class="badge-custom mb-3 w-100 justify-content-center"><i class="bi bi-briefcase-fill me-2"></i>Linked: ${ev.linkedJob.title}</div>`;
+                    }
+                    
+                    html += `
+                    <div class="col-md-6 col-lg-4 d-flex">
+                        <div class="item-card overflow-hidden w-100">
+                            <div class="cover-banner m-0" style="height: 180px; border-radius: 25px 25px 0 0;">
+                                <img src="${imgUrl}" alt="${ev.title}" style="width: 100%; height: 100%; object-fit: cover;">
+                            </div>
+                            <div class="p-4 d-flex flex-column h-100 mt-2">
+                                ${linkedJobHtml}
+                                <div class="d-flex justify-content-between mb-4 mt-2">
+                                    <span class="badge-custom">${isOnline ? 'ONLINE' : 'IN-PERSON'}</span>
+                                    <span class="badge-custom">${ev.category}</span>
+                                </div>
+                                <h4 class="fw-bold mb-3"><a href="event-details.html?id=${ev._id}" class="text-dark text-decoration-none">${ev.title}</a></h4>
+                                <p class="opacity-75 small mb-4"><i class="bi bi-calendar-event text-primary me-2"></i>${new Date(ev.date).toLocaleDateString()} &bull; ${ev.time}</p>
+                                
+                                <div class="mt-auto pt-4 border-top border-light border-opacity-10 d-flex align-items-center justify-content-between">
+                                    <div class="small fw-bold opacity-50">
+                                        <i class="bi bi-people-fill me-1"></i> ${ev.registeredUsers.length} Attending
+                                    </div>
+                                    <div class="d-flex gap-2">
+                                        <a href="event-details.html?id=${ev._id}" class="btn btn-outline-primary btn-sm px-3">Details</a>
+                                        ${isRegistered 
+                                            ? `<button class="btn btn-success btn-sm px-3" disabled><i class="bi bi-check-circle me-1"></i> Registered</button>`
+                                            : `<button onclick="initRegistrationModal('${ev._id}', '${ev.title.replace(/'/g, "\\'")}')" class="btn btn-primary btn-sm px-3">Register</button>`
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+                });
+                container.innerHTML = html;
+            } catch (error) {
+                container.innerHTML = `<div class="card p-5 text-center text-danger w-100"><i class="bi bi-exclamation-triangle fs-1 mb-2"></i> <p>Failed to load events. Please try again.</p></div>`;
+            }
+        }
+
+        // Registration Modal Logic
+        window.initRegistrationModal = function(eventId, eventTitle) {
+            const user = JSON.parse(localStorage.getItem('user'));
+            if (!user) {
+                alert('Please login to register.');
+                window.location.href = 'login.html';
+                return;
+            }
+
+            document.getElementById('regEventId').value = eventId;
+            document.getElementById('regModalTitle').innerText = `Register for ${eventTitle}`;
+            document.getElementById('regFullName').value = user.name || '';
+            document.getElementById('regNumber').value = user.rollNumber || '';
+            document.getElementById('regMobile').value = user.phone || '';
+
+            const modalEl = document.getElementById('eventRegistrationModal');
+            const modal = new bootstrap.Modal(modalEl);
+            modal.show();
+        };
+
+        document.getElementById('eventRegistrationForm')?.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('regSubmitBtn');
+            const alertBox = document.getElementById('regAlert');
+            const eventId = document.getElementById('regEventId').value;
+            
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Registering...';
+
+            try {
+                const data = {
+                    fullName: document.getElementById('regFullName').value,
+                    registrationNumber: document.getElementById('regNumber').value,
+                    mobileNumber: document.getElementById('regMobile').value
+                };
+
+                await api.events.registerEvent(eventId, data);
+
+                alertBox.className = 'alert alert-success d-block';
+                alertBox.innerText = 'Registration successful!';
+                
+                setTimeout(() => {
+                    const modalEl = document.getElementById('eventRegistrationModal');
+                    const modal = bootstrap.Modal.getInstance(modalEl);
+                    if (modal) modal.hide();
+                    fetchEvents();
+                }, 1500);
+
+            } catch (error) {
+                alertBox.className = 'alert alert-danger d-block';
+                alertBox.innerText = error.message;
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = 'Confirm Registration';
+            }
+        });
+    </script>
+
+    <!-- Event Registration Modal -->
+    <div class="modal fade" id="eventRegistrationModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: 25px; overflow: hidden; background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(20px);">
+                <div class="modal-header border-0 bg-primary bg-opacity-10 py-4">
+                    <h5 class="modal-title fw-bold text-primary" id="regModalTitle">Register for Event</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <form id="eventRegistrationForm">
+                        <input type="hidden" id="regEventId">
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold small opacity-75">Full Name</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-0"><i class="bi bi-person text-primary"></i></span>
+                                <input type="text" id="regFullName" class="form-control bg-light border-0 py-2" placeholder="Enter your full name" required>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold small opacity-75">Registration / Roll Number</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-0"><i class="bi bi-card-text text-primary"></i></span>
+                                <input type="text" id="regNumber" class="form-control bg-light border-0 py-2" placeholder="Enter registration number" required>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold small opacity-75">Mobile Number</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-0"><i class="bi bi-phone text-primary"></i></span>
+                                <input type="tel" id="regMobile" class="form-control bg-light border-0 py-2" placeholder="Enter mobile number" required>
+                            </div>
+                        </div>
+                        <div id="regAlert" class="alert d-none mb-3 py-2 small"></div>
+                        <button type="submit" class="btn btn-primary w-100 py-3 rounded-pill fw-bold shadow-sm" id="regSubmitBtn">
+                            Confirm Registration
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

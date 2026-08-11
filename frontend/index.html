@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alumni Association Platform</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="css/style.css" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Background Decoration Blobs (Silk Waves Effect) -->
+    <div class="bg-blob" id="blob-1"></div>
+    <div class="bg-blob" id="blob-2"></div>
+    <div class="bg-blob" id="blob-3"></div>
+
+    <div class="app-container">
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-custom">
+            <div class="container-fluid px-lg-5">
+                <a class="navbar-brand" href="index.html">
+                    <i class="bi bi-mortarboard-fill"></i> Alumni Association Platform
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                        <li class="nav-item"><a class="nav-link" href="#features">Innovation Hub</a></li>
+                        <li class="nav-item"><a class="nav-link" href="alumni-directory.html">Directory</a></li>
+                        <li class="nav-item"><a class="nav-link" href="jobs.html">Job Board</a></li>
+                        <li class="nav-item"><a class="nav-link" href="events.html">Events</a></li>
+                    </ul>
+                    <div class="d-flex ms-lg-4 gap-3" id="navAuthSpans">
+                        <a href="login.html" class="btn btn-outline-primary">Login</a>
+                        <a href="register.html" class="btn btn-primary">Register</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Hero Section -->
+        <section class="container-fluid px-lg-5 py-5">
+            <div class="row align-items-center g-5">
+                <div class="col-lg-6 text-center text-lg-start">
+                    <div class="badge-custom mb-4 animate-float">
+                        <i class="bi bi-stars me-2"></i> RE-IMAGINING ALUMNI CONNECT 2025
+                    </div>
+                    <h1 class="display-2 fw-bold mb-4">Connect. Grow. <span class="text-primary">Succeed
+                            Together.</span></h1>
+                    <p class="opacity-75 fs-5 mb-5 pe-lg-5">
+                        Experience the most tactile social network for academia. Find global opportunities, secure
+                        expert mentorship, and unite with your fellow graduates in a high-fidelity 3D ecosystem.
+                    </p>
+                    <div class="d-flex gap-4 justify-content-center justify-content-lg-start">
+                        <a href="register.html" class="btn btn-primary btn-lg px-5">Get Started</a>
+                        <a href="#features" class="btn btn-outline-primary btn-lg px-5">Explore Lab</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats Section -->
+        <section class="container-fluid px-lg-5 mb-5">
+            <div class="glass-card p-5">
+                <div class="app-row text-center g-5">
+                    <div class="col-6 col-md-3">
+                        <div class="summary-card mx-auto justify-content-center">
+                            <div>
+                                <h2 class="display-4 fw-bold mb-0">15K+</h2>
+                                <p class="opacity-50 small text-uppercase fw-bold">Active Alumni</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="summary-card mx-auto justify-content-center">
+                            <div>
+                                <h2 class="display-4 fw-bold mb-0">500+</h2>
+                                <p class="opacity-50 small text-uppercase fw-bold">Live Vacancies</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="summary-card mx-auto justify-content-center">
+                            <div>
+                                <h2 class="display-4 fw-bold mb-0">200+</h2>
+                                <p class="opacity-50 small text-uppercase fw-bold">Active Mentors</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="summary-card mx-auto justify-content-center">
+                            <div>
+                                <h2 class="display-4 fw-bold mb-0">50+</h2>
+                                <p class="opacity-50 small text-uppercase fw-bold">Global Events</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section id="features" class="container-fluid px-lg-5 py-5">
+            <div class="text-center mb-5">
+                <div class="badge-custom mx-auto mb-3">SYSTEM CAPABILITIES</div>
+                <h2 class="display-4 fw-bold">Everything you need to <span class="text-primary">thrive</span></h2>
+                <p class="opacity-75 max-w-700 mx-auto">A hyper-fluid ecosystem designed to catalyze career growth and
+                    community strengthening.</p>
+            </div>
+
+            <div class="app-grid">
+                <div class="item-card p-5 text-center h-100">
+                    <div class="summary-icon mx-auto mb-4" style="width: 80px; height: 80px; font-size: 2.5rem;">
+                        <i class="bi bi-briefcase"></i>
+                    </div>
+                    <h4 class="fw-bold mb-3">Elite Job Board</h4>
+                    <p class="opacity-75">Curated opportunities exclusively shared by the internal alumni circuit,
+                        removing the middleman.</p>
+                </div>
+                <div class="item-card p-5 text-center h-100">
+                    <div class="summary-icon mx-auto mb-4" style="width: 80px; height: 80px; font-size: 2.5rem;">
+                        <i class="bi bi-person-up"></i>
+                    </div>
+                    <h4 class="fw-bold mb-3">Professional Mentoring</h4>
+                    <p class="opacity-75">Direct lines to senior industry leads. Request sessions, track milestones, and
+                        scale your expertise.</p>
+                </div>
+                <div class="item-card p-5 text-center h-100">
+                    <div class="summary-icon mx-auto mb-4" style="width: 80px; height: 80px; font-size: 2.5rem;">
+                        <i class="bi bi-lightning-charge"></i>
+                    </div>
+                    <h4 class="fw-bold mb-3">Global Events</h4>
+                    <p class="opacity-75">From high-tech webinars to physical reunions. Integrated live streaming and
+                        registration tracking.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer-custom mt-5">
+            <div class="container-fluid px-lg-5">
+                <div class="row g-5">
+                    <div class="col-lg-5">
+                        <h3 class="fw-bold mb-4 text-primary"><i class="bi bi-mortarboard-fill"></i> AlumniConnect</h3>
+                        <p class="opacity-75 fs-6 mb-5 pe-lg-5">
+                            Building a resilient, hyper-connected academic community. Our platform bridges the gap
+                            between graduation and career mastery through a tactile, future-proof interface.
+                        </p>
+                        <div class="d-flex gap-3">
+                            <a href="#" class="btn btn-outline-primary btn-sm rounded-circle p-2"
+                                style="width: 40px; height: 40px;"><i class="bi bi-twitter-x"></i></a>
+                            <a href="#" class="btn btn-outline-primary btn-sm rounded-circle p-2"
+                                style="width: 40px; height: 40px;"><i class="bi bi-linkedin"></i></a>
+                            <a href="#" class="btn btn-outline-primary btn-sm rounded-circle p-2"
+                                style="width: 40px; height: 40px;"><i class="bi bi-github"></i></a>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-6">
+                        <h6 class="fw-bold mb-4 text-uppercase small opacity-50">Navigation</h6>
+                        <ul class="list-unstyled">
+                            <li class="mb-3"><a href="alumni-directory.html"
+                                    class="nav-link p-0 opacity-75 hover-primary">Alumni Cloud</a></li>
+                            <li class="mb-3"><a href="jobs.html" class="nav-link p-0 opacity-75 hover-primary">Role
+                                    Discovery</a></li>
+                            <li class="mb-3"><a href="events.html" class="nav-link p-0 opacity-75 hover-primary">Network
+                                    Sync</a></li>
+                            <li><a href="community.html" class="nav-link p-0 opacity-75 hover-primary">Public Feed</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-4">
+                        <h6 class="fw-bold mb-4 text-uppercase small opacity-50">Pulse Newsletter</h6>
+                        <div class="glass-card mb-4 p-4">
+                            <form class="d-flex gap-2">
+                                <input type="email" class="form-control border-light"
+                                    placeholder="secure-email@domain.com" required>
+                                <button type="submit" class="btn btn-primary px-4 fw-bold">Sync</button>
+                            </form>
+                        </div>
+                        <p class="small opacity-50"><i class="bi bi-shield-check me-2"></i> Your data is encrypted and
+                            secure with us.</p>
+                    </div>
+                </div>
+                <hr class="my-5 border-light border-opacity-10">
+                <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 pb-5">
+                    <p class="small mb-0 opacity-50">&copy; 2026 ALUMNICONNECT INC. DEPLOYED WITH TACTILE LIQUID GLASS
+                        UI.</p>
+                    <div class="d-flex gap-4">
+                        <a href="#" class="small text-decoration-none opacity-50 hover-primary">Protocol</a>
+                        <a href="#" class="small text-decoration-none opacity-50 hover-primary">Terminals</a>
+                        <a href="#" class="small text-decoration-none opacity-50 hover-primary">Privacy</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Bootstrap Bundle JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/main.js"></script>
+</body>
+
+</html>

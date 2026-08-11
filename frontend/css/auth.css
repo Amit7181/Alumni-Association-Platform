@@ -1,0 +1,167 @@
+/* Auth Pages Specific CSS - 3D Liquid Glass Overhaul */
+.auth-bg {
+    background: transparent;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 100px 0;
+}
+
+.auth-card {
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border);
+    border-top: 2px solid var(--highlight);
+    border-radius: 40px;
+    box-shadow: 0 40px 100px rgba(0,0,0,0.1), var(--glass-shadow);
+    overflow: hidden;
+    max-width: 1000px;
+    margin: 0 auto;
+    transition: var(--transition-glass);
+    display: flex;
+    flex-direction: row;
+}
+
+.auth-card:hover {
+    transform: translateY(-5px) scale(1.01);
+}
+
+.auth-sidebar {
+    background: linear-gradient(135deg, rgba(124, 58, 237, 0.15) 0%, rgba(45, 212, 191, 0.15) 100%);
+    backdrop-filter: blur(15px);
+    color: var(--text-main);
+    padding: var(--spacing-xl);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-right: 1px solid var(--glass-border);
+    width: 40%;
+    position: relative;
+}
+
+.auth-sidebar::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    background: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.4), transparent 60%);
+    pointer-events: none;
+}
+
+.auth-sidebar h2 {
+    font-weight: 800;
+    font-size: 3rem;
+    margin-bottom: var(--spacing-md);
+    color: var(--primary);
+    text-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.auth-form-container {
+    padding: var(--spacing-xl);
+    flex-grow: 1;
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* Image Upload Preview - 3D Jelly */
+.profile-preview {
+    width: 150px;
+    height: 150px;
+    border-radius: 40px;
+    object-fit: cover;
+    border: 5px solid var(--glass-border);
+    margin-bottom: var(--spacing-lg);
+    box-shadow: var(--gel-shadow), 0 10px 20px rgba(0,0,0,0.1);
+    transition: var(--transition-glass);
+}
+
+.profile-preview:hover {
+    transform: scale(1.1) rotate(5deg);
+    border-color: var(--primary-light);
+}
+
+@media (max-width: 768px) {
+    .auth-card {
+        flex-direction: column;
+    }
+    .auth-sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid var(--glass-border);
+    }
+}
+
+/* 3D Liquid Authentication Tabs */
+.nav-pills {
+    background: rgba(0, 0, 0, 0.05);
+    padding: 8px;
+    border-radius: var(--glass-radius-pill);
+    box-shadow: var(--recessed-shadow);
+    gap: 0;
+    max-width: fit-content;
+    margin: 0 auto 30px auto;
+}
+
+.nav-pills .nav-link {
+    background: transparent;
+    color: var(--text-main);
+    border-radius: var(--glass-radius-pill);
+    padding: 12px 30px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.85rem;
+    transition: var(--transition-glass);
+    border: none !important;
+}
+
+.nav-pills .nav-link.active {
+    background: linear-gradient(135deg, #3b82f6 0%, #7c3aed 100%) !important;
+    color: #ffffff !important;
+    box-shadow: 0 10px 20px rgba(124, 58, 237, 0.3), var(--gel-shadow);
+    transform: scale(1.05);
+}
+
+.nav-pills .nav-link:hover:not(.active) {
+    background: rgba(255, 255, 255, 0.4);
+    transform: translateY(-2px);
+}
+
+/* Role Selection Buttons as 3D Pills */
+.role-tab-btn {
+    border-radius: var(--glass-radius-pill) !important;
+    padding: 14px 34px !important;
+    font-weight: 800 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1.5px !important;
+    transition: var(--transition-glass) !important;
+    box-shadow: var(--glass-shadow);
+    border: none !important;
+}
+
+.role-tab-btn.btn-primary {
+    background: linear-gradient(135deg, #3b82f6 0%, #7c3aed 100%) !important;
+    color: white !important;
+    box-shadow: 0 12px 25px rgba(124, 58, 237, 0.35), var(--gel-shadow) !important;
+}
+
+.role-tab-btn.btn-outline-primary {
+    background: var(--glass-bg) !important;
+    border: 1px solid var(--glass-border) !important;
+    color: var(--primary) !important;
+    box-shadow: var(--recessed-shadow) !important;
+}
+
+.role-tab-btn:hover {
+    transform: translateY(-8px) scale(1.08) !important;
+    z-index: 2;
+    animation: focus-inflate 0.4s forwards;
+}
+
+.role-tab-btn:active {
+    transform: translateY(2px) scale(0.95) !important;
+}
+
+
+

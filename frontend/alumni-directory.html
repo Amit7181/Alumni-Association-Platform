@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alumni Directory - AlumniConnect</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/pages.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Background Decoration Blobs -->
+    <div class="bg-blob" id="blob-1"></div>
+    <div class="bg-blob" id="blob-2"></div>
+    <div class="bg-blob" id="blob-3"></div>
+
+    <div class="app-container">
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-custom">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="index.html">
+                    <i class="bi bi-mortarboard-fill"></i> AlumniConnect
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                        <li class="nav-item"><a class="nav-link active" href="alumni-directory.html">Directory</a></li>
+                        <li class="nav-item"><a class="nav-link" href="jobs.html">Jobs</a></li>
+                        <li class="nav-item"><a class="nav-link" href="events.html">Events</a></li>
+                        <li class="nav-item"><a class="nav-link" href="community.html">Community</a></li>
+                    </ul>
+                    <div id="navAuthSpans">
+                        <!-- Auth JS will populate this -->
+                        <a href="login.html" class="btn btn-outline-primary">Log In</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <div class="page-header">
+            <h1 class="display-3">Alumni Directory</h1>
+            <p class="lead">Connect, network, and grow with our extensive community.</p>
+        </div>
+
+        <div class="container mb-5">
+            <div class="row g-4">
+                <!-- Sidebar Filters -->
+                <div class="col-lg-3">
+                    <div class="filter-sidebar">
+                        <h5>Filters</h5>
+                        <form id="filterForm">
+                            <div class="mb-3">
+                                <label class="form-label small fw-semibold">Search Name</label>
+                                <input type="text" id="searchName" class="form-control" placeholder="e.g. John Doe">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label small fw-semibold">Department</label>
+                                <select id="filterDept" class="form-select">
+                                    <option value="">All Departments</option>
+                                    <option value="Computer Science">Computer Science</option>
+                                    <option value="Information Technology">Information Technology</option>
+                                    <option value="Mechanical Engineering">Mechanical Engineering</option>
+                                </select>
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label small fw-semibold">Passing Year</label>
+                                <input type="number" id="filterYear" class="form-control" placeholder="e.g. 2020">
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Apply Filters</button>
+                            <button type="reset" class="btn btn-outline-primary w-100 mt-2" onclick="setTimeout(()=>document.getElementById('filterForm').dispatchEvent(new Event('submit')), 100)">Reset</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Directory Grid -->
+                <div class="col-lg-9">
+                    <div class="row g-4" id="alumniDirectoryContainer">
+                        <!-- Javascript populates cards here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/pages.js"></script>
+</body>
+</html>

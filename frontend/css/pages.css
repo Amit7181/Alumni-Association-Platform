@@ -1,0 +1,163 @@
+/* Pages CSS - Liquid Glass Theme */
+
+.page-header {
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    padding: 100px 0 60px;
+    margin-bottom: var(--spacing-xl);
+    border-bottom: 1px solid var(--glass-border);
+    text-align: center;
+    position: relative;
+    border-radius: 0 0 var(--glass-radius) var(--glass-radius);
+    box-shadow: var(--glass-shadow);
+}
+
+.page-header h1 {
+    font-weight: 700;
+    font-size: 3.5rem;
+    color: var(--text-main);
+}
+
+.filter-sidebar {
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border);
+    border-top: 1px solid var(--highlight);
+    border-radius: var(--glass-radius);
+    padding: var(--spacing-lg);
+    box-shadow: var(--glass-shadow);
+    transition: var(--transition-glass);
+}
+
+.filter-sidebar h5 {
+    font-weight: 700;
+    margin-bottom: var(--spacing-lg);
+    font-size: 1.4rem;
+    color: var(--primary);
+    border-bottom: 2px solid var(--glass-border);
+    padding-bottom: var(--spacing-sm);
+}
+
+/* User/Alumni Cards - Inflated 3D */
+.user-card {
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border);
+    border-top: 2px solid var(--highlight);
+    border-radius: 40px; /* More organic */
+    padding: var(--spacing-xl);
+    text-align: center;
+    box-shadow: var(--glass-shadow), 0 15px 35px rgba(0,0,0,0.05);
+    transition: var(--transition-glass);
+    position: relative;
+    overflow: hidden;
+}
+
+.user-card:hover {
+    transform: translateY(-8px) scale(1.02) rotateX(4deg) rotateY(4deg);
+    background: var(--glass-bg-strong);
+    box-shadow: 0 40px 80px rgba(0,0,0,0.1), var(--glass-shadow);
+    animation: jelly-squish 0.6s var(--squish-bounce);
+}
+
+.user-card img {
+    width: 130px;
+    height: 130px;
+    border-radius: 40px;
+    object-fit: cover;
+    margin-bottom: var(--spacing-md);
+    border: 5px solid var(--glass-border);
+    box-shadow: var(--gel-shadow);
+    transition: var(--transition-glass);
+}
+
+.user-card:hover img {
+    transform: scale(1.1) rotate(-3deg);
+    border-color: var(--primary-light);
+}
+
+.skill-tag {
+    background: var(--glass-bg-strong);
+    color: var(--primary);
+    font-size: 0.85rem;
+    font-weight: 800;
+    padding: 8px 18px;
+    border-radius: var(--glass-radius-pill);
+    display: inline-block;
+    margin: 5px;
+    border: 1px solid var(--glass-border);
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.05);
+    transition: var(--transition-glass);
+}
+
+.skill-tag:hover {
+    transform: scale(1.15) translateY(-2px);
+    background: white;
+    color: var(--primary);
+}
+
+/* Job & Event Cards - Recessed & 3D */
+.item-card {
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border);
+    border-top: 2px solid var(--highlight);
+    border-radius: 40px;
+    padding: var(--spacing-xl);
+    margin-bottom: var(--spacing-lg);
+    box-shadow: var(--glass-shadow);
+    transition: var(--transition-glass);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.item-card:hover {
+    transform: translateY(-12px) scale(1.01) rotateX(2deg);
+    background: var(--glass-bg-strong);
+    box-shadow: 0 45px 90px rgba(0,0,0,0.12), var(--glass-shadow);
+    animation: jelly-squish 0.8s var(--squish-bounce);
+}
+
+.cover-banner {
+    height: 260px;
+    background: linear-gradient(135deg, var(--primary-light) 0%, var(--secondary) 100%);
+    border-radius: 30px;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: var(--spacing-lg);
+    box-shadow: inset 0 0 50px rgba(0,0,0,0.15), 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.cover-banner::after {
+    content: '';
+    position: absolute;
+    top: -20%;
+    left: -20%;
+    width: 140%;
+    height: 140%;
+    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.5), transparent 70%);
+    filter: blur(30px);
+}
+
+.profile-img-overlap {
+    width: 190px;
+    height: 190px;
+    border-radius: 45px;
+    border: 10px solid var(--glass-bg-strong);
+    margin-top: -95px;
+    background: var(--glass-bg-strong);
+    box-shadow: var(--gel-shadow), 0 15px 30px rgba(0,0,0,0.1);
+    object-fit: cover;
+    position: relative;
+    z-index: 2;
+    transition: var(--transition-glass);
+}
+
+.item-card:hover .profile-img-overlap {
+    transform: translateY(-10px) rotate(-2deg) scale(1.05);
+    border-color: white;
+}
+
+
+

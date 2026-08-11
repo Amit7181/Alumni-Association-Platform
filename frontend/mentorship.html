@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mentorship - AlumniConnect</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/pages.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Background Decoration Blobs -->
+    <div class="bg-blob" id="blob-1"></div>
+    <div class="bg-blob" id="blob-2"></div>
+    <div class="bg-blob" id="blob-3"></div>
+
+    <div class="app-container">
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-custom">
+            <div class="container-fluid px-4">
+                <a class="navbar-brand" href="index.html"><i class="bi bi-mortarboard-fill"></i> AlumniConnect</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navContent">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navContent">
+                    <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                        <li class="nav-item"><a class="nav-link" href="alumni-directory.html">Directory</a></li>
+                        <li class="nav-item"><a class="nav-link" href="jobs.html">Jobs</a></li>
+                        <li class="nav-item"><a class="nav-link" href="events.html">Events</a></li>
+                        <li class="nav-item"><a class="nav-link" href="community.html">Community</a></li>
+                    </ul>
+                    <div id="navAuthSpans">
+                        <a href="login.html" class="btn btn-outline-primary">Log In</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container py-5 mt-4">
+            <div class="text-center mb-5">
+                <div class="display-3 text-primary mb-4"><i class="bi bi-person-hearts"></i></div>
+                <h1 class="display-4 fw-bold">Mentorship Hub</h1>
+                <p class="opacity-75 max-w-700 mx-auto fs-5">Connect with experienced professionals, or review your active guidance requests in real-time.</p>
+            </div>
+
+            <div class="row" id="mainContentRow">
+                <div class="col-12 text-center py-5">
+                    <div class="spinner-border text-primary"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Request Modal -->
+    <div class="modal fade" id="requestModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content overflow-hidden">
+                <div class="modal-header border-0 p-4 pb-0">
+                    <h5 class="modal-title fw-bold text-primary">Request Guidance</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4 pt-4">
+                    <form id="requestForm">
+                        <input type="hidden" id="mentorId">
+                        <div class="mb-4">
+                            <label class="form-label small fw-bold">Session topic</label>
+                            <input type="text" class="form-control" id="topic" required placeholder="e.g. System Design Interview Prep">
+                        </div>
+                        <div class="mb-5">
+                            <label class="form-label small fw-bold">Message to Mentor</label>
+                            <textarea class="form-control" id="message" rows="4" required placeholder="Introduce yourself and explain your goals..."></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100 py-3 fw-bold" id="sendReqBtn">Send Mentorship Request</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="http://localhost:5000/socket.io/socket.io.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        let currentUserGlobal = null;
+        document.addEventListener('DOMContentLoaded', async () => {
+            api.checkAuth();
+            const userStr = localStorage.getItem('user');
+            const currentUser = JSON.parse(userStr);
+
+            const params = new URLSearchParams(window.location.search);
+            const mentorIdToRequest = params.get('mentor');
+
+            const container = document.getElementById('mainContentRow');
+
+            if (mentorIdToRequest && currentUser.role === 'student') {
+                container.innerHTML = `
+                <div class="col-lg-7 mx-auto">
+                    <div class="card p-5 text-center shadow-lg border-0">
+                        <h3 class="fw-bold mb-3">Begin Mentorship</h3>
+                        <p class="opacity-75 mb-5 fs-5">You are about to initiate a direct connection with this professional mentor.</p>
+                        <button class="btn btn-primary btn-lg w-100 mb-3" onclick="openRequestModal('${mentorIdToRequest}')"><i class="bi bi-send-fill me-2"></i> Compose Introduction</button>
+                        <a href="alumni-directory.html" class="btn btn-outline-primary w-100">Cancel & Go Back</a>
+                    </div>
+                </div>`;
+            } else {
+                currentUserGlobal = currentUser;
+                await loadRequestsTable(currentUser, container);
+
+                if (window.socket) {
+                    window.socket.on('mentorship_request', () => loadRequestsTable(currentUserGlobal, container));
+                    window.socket.on('mentorship_updated', () => loadRequestsTable(currentUserGlobal, container));
+                }
+            }
+
+            document.getElementById('requestForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const btn = document.getElementById('sendReqBtn');
+                try {
+                    btn.disabled = true;
+                    btn.innerText = 'Requesting...';
+
+                    const payload = {
+                        mentorId: document.getElementById('mentorId').value,
+                        topic: document.getElementById('topic').value,
+                        message: document.getElementById('message').value
+                    };
+
+                    const res = await fetch(`${BASE_URL}/mentorship`, {
+                        method: 'POST',
+                        headers: api.getHeaders(),
+                        body: JSON.stringify(payload)
+                    });
+                    
+                    await api.handleResponse(res);
+                    
+                    showToast('Request sent to mentor', 'success');
+                    bootstrap.Modal.getInstance(document.getElementById('requestModal')).hide();
+                    setTimeout(() => window.location.href = 'student-dashboard.html', 1500);
+
+                } catch (err) {
+                    alert('Error: ' + err.message);
+                } finally {
+                    btn.disabled = false;
+                    btn.innerText = 'Send Mentorship Request';
+                }
+            });
+        });
+
+        window.openRequestModal = function(mentorId) {
+            document.getElementById('mentorId').value = mentorId;
+            new bootstrap.Modal(document.getElementById('requestModal')).show();
+        };
+
+        async function loadRequestsTable(user, container) {
+            try {
+                const res = await fetch(`${BASE_URL}/mentorship`, { headers: api.getHeaders() });
+                const requests = await api.handleResponse(res);
+
+                if (requests.length === 0) {
+                    container.innerHTML = `
+                    <div class="col-12 text-center">
+                        <div class="card p-5 border-0 shadow-sm opacity-75">
+                            <i class="bi bi-inbox fs-1 d-block mb-3 text-primary"></i>
+                            <h4 class="fw-bold">No active requests</h4>
+                            <p class="mb-4">You haven't initiated any mentorship threads yet.</p>
+                            ${user.role === 'student' ? `<a href="alumni-directory.html" class="btn btn-primary rounded-pill px-5">Find Professional Mentors</a>` : ''}
+                        </div>
+                    </div>`;
+                    return;
+                }
+
+                let html = `
+                <div class="col-12">
+                    <div class="card shadow-sm border-0 overflow-hidden">
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="border-light opacity-75">
+                                    <tr>
+                                        <th class="ps-4">Date</th>
+                                        <th>Subject / Objective</th>
+                                        <th>${user.role === 'student' ? 'Mentor' : 'Applicant'}</th>
+                                        <th>Status</th>
+                                        ${user.role === 'alumni' ? '<th class="pe-4 text-end">Management</th>' : ''}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                `;
+
+                requests.forEach(req => {
+                    const otherPartyName = user.role === 'student' ? req.mentor.name : req.student.name;
+                    let bStatus = req.status.toUpperCase();
+
+                    html += `
+                    <tr>
+                        <td class="ps-4 opacity-50 small">${new Date(req.createdAt).toLocaleDateString()}</td>
+                        <td>
+                            <strong class="d-block text-primary">${req.topic}</strong>
+                            <span class="opacity-75 small text-truncate d-inline-block" style="max-width: 300px;">${req.message}</span>
+                        </td>
+                        <td class="fw-bold">${otherPartyName}</td>
+                        <td><span class="badge-custom">${bStatus}</span></td>
+                        ${user.role === 'alumni' ? `
+                            <td class="pe-4 text-end">
+                                ${req.status === 'pending' ? `
+                                    <button class="btn btn-primary btn-sm me-2 fw-bold" onclick="updateStatus('${req._id}', 'accepted')"><i class="bi bi-check2"></i> Approve</button>
+                                    <button class="btn btn-outline-primary btn-sm fw-bold" onclick="updateStatus('${req._id}', 'rejected')"><i class="bi bi-x"></i></button>
+                                ` : '<i class="bi bi-check-all text-primary"></i>'}
+                            </td>
+                        ` : ''}
+                    </tr>`;
+                });
+
+                html += `</tbody></table></div></div></div>`;
+                container.innerHTML = html;
+
+            } catch (err) {
+                container.innerHTML = `<div class="badge-custom bg-danger bg-opacity-10 text-danger w-100 p-4 justify-content-center">Session expired. Reconnecting...</div>`;
+            }
+        }
+
+        window.updateStatus = async function(id, status) {
+            try {
+                const res = await fetch(`${BASE_URL}/mentorship/${id}/status`, {
+                    method: 'PUT',
+                    headers: api.getHeaders(),
+                    body: JSON.stringify({ status })
+                });
+                await api.handleResponse(res);
+            } catch(e) {
+                alert(e.message);
+            }
+        }
+    </script>
+</body>
+</html>

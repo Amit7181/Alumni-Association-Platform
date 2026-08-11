@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Announcements - AlumniConnect</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+    <nav class="navbar navbar-expand-lg navbar-custom fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html"><i class="bi bi-mortarboard-fill"></i> AlumniConnect</a>
+            <div class="ms-auto"><a href="index.html" class="btn btn-outline-secondary">Go to Dashboard</a></div>
+        </div>
+    </nav>
+
+    <div class="container" style="margin-top: 100px; margin-bottom: 60px;">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="text-center mb-5">
+                    <h1 class="fw-bold"><i class="bi bi-megaphone-fill text-danger me-2"></i>Official Announcements</h1>
+                    <p class="text-muted">Important updates, news, and guidelines from the administration.</p>
+                </div>
+
+                <div id="announcementContainer">
+                    <div class="text-center py-5"><div class="spinner-border text-primary"></div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            api.checkAuth();
+            
+            if (window.socket) {
+                window.socket.on('announcement_created', () => fetchAnnouncements());
+            }
+
+            await fetchAnnouncements();
+        });
+
+        async function fetchAnnouncements() {
+            const container = document.getElementById('announcementContainer');
+            try {
+                const res = await fetch(`${BASE_URL}/announcements`, { headers: api.getHeaders() });
+                const announcements = await api.handleResponse(res);
+
+                if(announcements.length === 0) {
+                    container.innerHTML = `<div class="card p-5 text-center text-muted shadow-sm border-0">No official announcements at this time.</div>`;
+                    return;
+                }
+
+                let html = '';
+                announcements.forEach(a => {
+                    const pinBadge = a.isPinned ? `<span class="badge bg-danger ms-2"><i class="bi bi-pin-angle-fill me-1"></i>Pinned</span>` : '';
+                    html += `
+                    <div class="card shadow-sm border-0 mb-4 ${a.isPinned ? 'border border-danger border-opacity-50 shadow' : ''}">
+                        <div class="card-body p-4 p-md-5">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <div>
+                                    <span class="badge bg-secondary bg-opacity-10 text-dark border me-2">${a.category}</span>
+                                    <small class="text-muted fw-semibold">${new Date(a.createdAt).toLocaleDateString()}</small>
+                                </div>
+                                <div>${pinBadge}</div>
+                            </div>
+                            <h3 class="fw-bold mb-3">${a.title}</h3>
+                            <p class="text-muted mb-0 lh-lg" style="white-space: pre-wrap;">${a.content}</p>
+                            
+                            <hr class="my-4">
+                            <div class="d-flex justify-content-end text-muted small">
+                                <span><i class="bi bi-person me-1"></i> Posted by <strong>Admin Team</strong></span>
+                            </div>
+                        </div>
+                    </div>`;
+                });
+                container.innerHTML = html;
+            } catch(e) {
+                container.innerHTML = `<div class="alert alert-danger border-0">Failed to load announcements.</div>`;
+            }
+        });
+    </script>
+</body>
+</html>
